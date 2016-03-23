@@ -1,0 +1,9 @@
+
+
+for (int i = 100; i<1000; i++){ //bags
+	for(int j = 0; j<i;j++){//Pos fake coin
+		Coins bag = new Coins(i);
+		FakeCoins fakeCoins = new FakeCoins(bag);
+		int fakepos = fakeCoins.findFake();
+	}
+}
