@@ -45,7 +45,6 @@ public class RoadsInCity {
 		int aux1 = map[0].length;
 		
 		/// MIRAR PARA CUANDO ESTA FUERA DE LOS LIMITES
-		// prueba de que estoy haciendo git bien
 		if (x1 < aux && x2 < aux && y1 < aux1 && y2 < aux1) {
 			return false;
 		} else if (x1 <= x2 || y1 >= y2) {
