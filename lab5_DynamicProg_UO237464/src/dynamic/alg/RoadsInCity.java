@@ -16,23 +16,51 @@ public class RoadsInCity {
 		map[b1][b2] = -1;
 	}
 
-	public long calculate(int x1, int y1, int x2, int y2) {
-		if (!isPosible(x1, y1, x2, y2)) {
-			return -1;
-		}
-		int result = 0;
-
-		visualMap[x1][y1] = 's';
-		visualMap[x2][y2] = 'f';
-		show();
-		showB();
-
-		for (int i = x1; i <= x2; i++) {
-			for (int j = y1; j <= y2; j++) {
-				map[i][j] = calcularCasilla(i, j);
+	private void fillInitialMap(int si, int sj, int ei, int ej) {
+		map[si][sj] = 1;
+		for (int i = 0; i < map.length; i++) {
+			for (int j = 0; j < map[0].length; j++) {
+				if ((i > si || i < ei) && (j < sj || j > ej)) {
+					map[i][j] = -1;
+				}
 			}
 		}
-		result = map[x2][y2];
+	}
+
+	public long calculate(int si, int sj, int ei, int ej) {
+		int result = 0;
+
+		// Complete the initial maps.
+		fillInitialMap(si, sj, ei, ej);
+		visualMap[si][sj] = 's';
+		visualMap[ei][ej] = 'f';
+
+		// Print the maps in the console.
+		show();
+		showGraphicMap();
+
+		// Look if we can reach the end point.
+		if (!isPosible(si, sj, ei, ej)) {
+			return -1;
+		}
+
+		// Calculate the values of the number of ways to all the reacheables
+		// nodes.
+
+		for (int i = si; i <= ei; i--) {
+			for (int j = sj; j <= ej; j++) {
+				
+				map[i][j] = calcularCasilla(i, j);
+				if (i == ei && j == ej) {
+					break;
+				}
+			}
+		}
+
+		// Assign to the local variable the value of the ways to arrive to the
+		// end point and return it.
+
+		result = map[ei][ej];
 		if (result > 0) {
 			return result;
 		} else {
@@ -40,33 +68,43 @@ public class RoadsInCity {
 		}
 	}
 
-	private boolean isPosible(int x1, int y1, int x2, int y2) {
-		int aux = map.length;
-		int aux1 = map[0].length;
-		
-		/// MIRAR PARA CUANDO ESTA FUERA DE LOS LIMITES
-		if (x1 < aux && x2 < aux && y1 < aux1 && y2 < aux1) {
-			return false;
-		} else if (x1 <= x2 || y1 >= y2) {
-			return false;
+	private int calcularCasilla(int i, int j) {
+		int aux = -1;
+		if (i + 1 < map.length && j - 1 >= 0) {
+			// Both possible.
+			if (map[i][j - 1] >= 0 && map[i + 1][j] >= 0) {
+				aux = map[i][j - 1] + map[i + 1][j];
+			}
+			// Only left node possible.
+			else if (map[i][j + 1] >= 0 && map[i + 1][j] >= 0) {
+				aux = map[i][j + 1];
+			}
+			// Only down node possible.
+			else if (map[i][j - 1] >= 0 && map[i + 1][j] >= 0) {
+				aux = map[i - 1][j];
+			}
+		} else if (i + 1 < map.length && j - 1 < 0) {
+			if (map[i + 1][j] > 0) {
+				aux = map[i + 1][j];
+			}
+		} else if (i + 1 >= map.length && j - 1 >= 0) {
+			if (map[i][j - 1] > 0) {
+				aux = map[i][j - 1];
+			}
 		}
-		return true;
+
+		return aux;
 	}
 
-	public int calcularCasilla(int i, int j) {
-		int result = 1;
-
-		if (map[i - 1][j] > 0 && map[i][j - 1] > 0) {
-			result = map[i - 1][j] + map[i][j - 1];
-		} else if (map[i - 1][j] < 0 && map[i][j - 1] > 0) {
-			result = map[i][j - 1];
-		} else if (map[i - 1][j] > 0 && map[i][j - 1] < 0) {
-			result = map[i - 1][j];
+	private boolean isPosible(int si, int sj, int ei, int ej) {
+		if (si < ei && sj > ei) {
+			return true;
+		} else {
+			return false;
 		}
-		return result;
 	}
 
-	public char[][] crearMapaVisual(int a, int b) {
+	private char[][] crearMapaVisual(int a, int b) {
 		char[][] aux = new char[a][b];
 		for (int i = 0; i < a; i++) {
 			for (int j = 0; j < b; j++) {
@@ -76,7 +114,7 @@ public class RoadsInCity {
 		return aux;
 	}
 
-	public void show() {
+	private void show() {
 
 		System.out.print("THIS IS A MAP OF DIMENSIONS " + map.length + "x"
 				+ map[0].length);
@@ -90,7 +128,7 @@ public class RoadsInCity {
 		System.out.println();
 	}
 
-	public void showB() {
+	private void showGraphicMap() {
 
 		for (int i = 0; i < visualMap.length; i++) {
 			System.out.println();
