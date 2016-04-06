@@ -16,25 +16,25 @@ public class RoadsInCityTest {
 		long result = executeFromFile("case1.txt");
 		assertEquals(2, result);
 	}
-	
+
 	@Test
 	public void testB() {
 		long result = executeFromFile("case2.txt");
 		assertEquals(252, result);
 	}
-	
+
 	@Test
 	public void testC() {
 		long result = executeFromFile("case3.txt");
 		assertEquals(0, result);
 	}
-	
+
 	@Test
 	public void testD() {
 		long result = executeFromFile("case4.txt");
 		assertEquals(6406484391866534976l, result);
 	}
-	
+
 	@Test
 	public void testE() {
 		long result = executeFromFile("case5.txt");
@@ -46,19 +46,19 @@ public class RoadsInCityTest {
 		long result = executeFromFile("case6.txt");
 		assertEquals(2, result);
 	}
-	
+
 	@Test
 	public void testG() {
 		long result = executeFromFile("case7.txt");
 		assertEquals(-1, result);
 	}
-	
+
 	@Test
 	public void testH() {
 		long result = executeFromFile("case8.txt");
 		assertEquals(-1, result);
 	}
-	
+
 	@Test
 	public void testI() {
 		long result = executeFromFile("case9.txt");
