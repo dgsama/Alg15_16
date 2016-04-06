@@ -34,9 +34,10 @@ public class RoadsInCity {
 
 	public long calculate(int si, int sj, int ei, int ej) {
 		long result = 0;
+		boolean isFinish = false;
 		// Look if we can reach the end point.
 		if (!isPosible(si, sj, ei, ej)) {
-			System.err.println("Something is invalid in this map!!");
+			System.err.println("\nSomething is invalid in this map!!");
 			return -1;
 		}
 		// Complete the initial maps.
@@ -45,7 +46,7 @@ public class RoadsInCity {
 		visualMap[ei][ej] = 'f';
 
 		// Print the maps in the console.
-		show();
+		show(isFinish);
 		showGraphicMap();
 
 		// Calculate the values of the number of ways to all the reachable
@@ -58,7 +59,9 @@ public class RoadsInCity {
 				}
 			}
 		}
-		show();
+		//Show the result map
+		isFinish =true;
+		show(isFinish);
 
 		// Assign to the local variable the value of the ways to arrive to the
 		// end point and return it.
@@ -132,9 +135,13 @@ public class RoadsInCity {
 		return aux;
 	}
 
-	private void show() {
-
-		System.out.print("THIS IS A MAP OF DIMENSIONS " + map.length + "x" + map[0].length);
+	private void show(boolean isFinish) {
+		System.out.println();
+		if(isFinish == false){
+			System.out.print("THIS IS A MAP OF DIMENSIONS " + map.length + "x" + map[0].length);
+		}else{
+			System.out.print("THIS IS THE RESULT MAP");
+		}
 		for (int i = 0; i < map.length; i++) {
 			System.out.println();
 			for (int j = 0; j < map[0].length; j++) {
@@ -153,7 +160,6 @@ public class RoadsInCity {
 				System.out.print(visualMap[i][j] + " ");
 			}
 		}
-		System.out.println();
 		System.out.println();
 	}
 
