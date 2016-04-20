@@ -4,18 +4,21 @@ import java.io.BufferedReader;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.lang.reflect.Array;
 import java.util.ArrayList;
 
 public class Nonogram {
 
 	public static boolean[][] squares;
+	public static boolean[][] result;
 	public static ArrayList<ArrayList<Integer>> rowsNumbers;
 	public static ArrayList<ArrayList<Integer>> columnsNumbers;
 
 	private static int size;
+	private static boolean found = false;
+
 	private static final char black = 'x';
 	private static final char white = '.';
-	private static boolean found = false;
 
 	/**
 	 * Constructor for the class Nonogram
@@ -53,9 +56,9 @@ public class Nonogram {
 	 */
 	protected void show() {
 		System.out.println("Nonogram of dimension " + getSize());
-		for (int i = 0; i < squares.length; i++) {
-			for (int j = 0; j < squares[0].length; j++) {
-				if (squares[i][j] == false) {
+		for (int i = 0; i < result.length; i++) {
+			for (int j = 0; j < result[0].length; j++) {
+				if (result[i][j] == false) {
 					System.out.print((char) white + " ");
 				} else {
 					System.out.print((char) black + " ");
@@ -105,161 +108,134 @@ public class Nonogram {
 	}
 
 	public void calculate() {
-		backtracking(0, 0);
+		backtracking(0);
 	}
 
-	private void backtracking(int x, int y) {
-
-		if (isASolution(x)) {
-			found = true;
-			show();
+	private void backtracking(int row) {
+		if (row == getSize()) {
+			if (validSolution() == true) {
+				found = true;
+				result = squares;
+				System.out.println("KKKKKKKKKKKKKK");
+				show();
+			}
 		} else {
-			for (int i = 0; i < 2; i++) {
-				if (i == 0) {
-					squares[x][y] = false;
-				} else if (i == 1) {
-					squares[x][y] = true;
+			boolean[] tempRow = squares[row];
+			boolean[][] posibilities = checkOptions(row);
+			for (int i = 0; i < posibilities.length; i++) {
+				squares[row] = posibilities[i];
+				if (found == false) {
+					backtracking(row + 1);
 				}
+				squares[row] = tempRow;
+			}
+		}
+	}
 
-				if (restriccionesF(x) == false && restricionC(y) == false) {
-					// Primer if restriccionesFilaContador
-					// Segundo cambioFila
-					// else
-					if (cambioFila(x, y) && restriccionesFilaContador(x) == true) {// si
-																					// pasa
-																					// asegurarse
-																					// de
-																					// que
-																					// no
-																					// hay
-																					// restriccion
-																					// en
-																					// toda
-																					// la
-																					// fila
-						backtracking(x + 1, 0);
-						squares[x][y] = false;
-					} else if (cambioFila(x, y) && restriccionesFilaContador(x) == false) {
-						squares[x][y] = false;
-					} else {
-						backtracking(x, y + 1);
-						squares[x][y] = false;
+	private boolean[][] checkOptions(int row) {
+		ArrayList<Integer> constraints = rowsNumbers.get(row);
+		boolean[][] aux;
+
+		if (constraints.size() > 1) {
+			boolean[] r = new boolean[size];
+			PosibilitiesBacktracking p = new PosibilitiesBacktracking(constraints);
+			p.BackTracking(0, r);
+			aux = new boolean[p.result.size()][getSize()];
+			for (int i = 0; i < aux.length; i++) {
+				aux[i] = p.result.get(i);
+			}
+		} else {
+			int c = constraints.get(0);
+			int p = squares.length + 1 - c;
+			aux = new boolean[p][squares.length];
+			for (int i = 0; i < p; i++) {
+				for (int j = i; j < c; j++) {
+					aux[i][j] = true;
+				}
+			}
+		}
+		return aux;
+	}
+
+	private boolean validSolution() {
+		for (int i = 0; i < getSize(); i++) {
+			if (columnsChecking(i) == false) {
+				return false;
+			}
+		}
+		return true;
+	}
+
+	private boolean columnsChecking(int colIndex) {
+		ArrayList<Integer> columnConstraints = columnsNumbers.get(colIndex);
+		int counter = 0;
+		int indexFirstElement = getFirst(colIndex);
+
+		if (columnConstraints.size() > 1) {
+			if (indexFirstElement == -1) {
+				return false;
+			}
+
+			int index = 0;
+			boolean black = false;
+			int[] aux = new int[columnConstraints.size()];
+
+			for (int i = 0; i < squares.length; i++) {
+				boolean v = squares[i][colIndex];
+				if (v == true) {
+					counter++;
+					black = false;
+					if (i == squares.length - 1) {
+						aux[index] = counter;
+						index++;
 					}
-
+				} else if (v == false && black == false) {
+					aux[index] = counter;
+					counter = 0;
+					black = true;
+					index++;
 				}
 			}
-		}
-	}
 
-	private boolean restriccionesF(int row) {
-		ArrayList<Integer> row_list = rowsNumbers.get(row);
-		int cont = 0;
-		int contglob = 0;
-		int r = 0;
-		int res = row_list.get(r);
-		for (int i = 0; i < size; i++) {
-			if (res != 0) {
-				if (squares[row][i] == true) {
-					cont = cont + 1;
-					contglob = contglob + 1;
-				} else {
-					if (cont <= res) {
-						cont = 0;
-						r = r + 1;
-						if (r < row_list.size())
-							res = row_list.get(r);
-					} else
-						return true;
-				}
-
-			}
-		}
-		return false;
-	}
-
-	private boolean restricionC(int column) {
-		ArrayList<Integer> col_list = columnsNumbers.get(column);
-		int cont = 0;
-		int r = 0;
-		int res = col_list.get(r);
-		for (int i = 0; i < size; i++) {
-			if (res != 0) {
-				if (squares[i][column] == true) {
-					cont = cont + 1;
-				} else {
-					if (cont <= res) {
-						cont = 0;
-						r = r + 1;
-						if (r < col_list.size())
-							res = col_list.get(r);
-					} else
-						return true;
+			for (int i = 0; i < columnConstraints.size(); i++) {
+				if (columnConstraints.get(i) != aux[i]) {
+					return false;
 				}
 			}
-		}
-		return false;
-
-	}
-
-	private boolean cambioFila(int x, int y) {
-		y = y + 1;
-		if (y == size)
 			return true;
-		return false;
-	}
-
-	private boolean restriccionesFilaContador(int fila) {
-		ArrayList<Integer> r_list = rowsNumbers.get(fila);
-		int contres = 0;
-		int contnono = 0;
-		int res;
-		for (int i = 0; i < r_list.size(); i++) {
-			res = r_list.get(i);
-			if (res != 0)
-				contres += res;
-		}
-		for (int i = 0; i < size; i++) {
-			if (squares[fila][i] == true)
-				contnono += 1;
-		}
-		if (contnono == contres)
-			return true;
-		return false;
-	}
-
-	private boolean isASolution(int x) {
-		if (x == size) {
-			return true;
-		}
-		return false;
-	}
-
-	public void imprimirCondicionesFilas() {
-		ArrayList<ArrayList<Integer>> aux = rowsNumbers;
-
-		System.out.println("Filas");
-		for (int i = 0; i < aux.size(); i++) {
-			ArrayList<Integer> aux1 = aux.get(i);
-			for (int j = 0; j < aux1.size(); j++) {
-				System.out.print(aux1.get(j) + ", ");
+		} else{
+			if (indexFirstElement != -1) {
+				for (int i = indexFirstElement; i < squares.length; i++) {
+					if (squares[i][colIndex] == true) {
+						counter++;
+					} else if (moreSquares(i, colIndex) == true) {
+						return false;
+					} else {
+						break;
+					}
+				}
+				return (counter == columnConstraints.get(0));
+			} else {
+				return true;
 			}
-			System.out.println("");
 		}
-
 	}
-	
-	public void imprimirCondicionescolumnas() {
-		ArrayList<ArrayList<Integer>> aux = columnsNumbers;
-		
-		System.out.println("columnas");
-		for (int i = 0; i < aux.size(); i++) {
-			ArrayList<Integer> aux1 = aux.get(i);
-			for (int j = 0; j < aux1.size(); j++) {
-				System.out.print(aux1.get(j) + ", ");
-			}
-			System.out.println("");
-		}
 
+	private boolean moreSquares(int startIndex, int colIndex) {
+		for (int i = startIndex; i < squares.length; i++) {
+			if (squares[i][colIndex] == true) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	private int getFirst(int col) {
+		for (int i = 0; i < squares.length; i++) {
+			if (squares[i][col] == true)
+				return i;
+		}
+		return -1;
 	}
 
 }
