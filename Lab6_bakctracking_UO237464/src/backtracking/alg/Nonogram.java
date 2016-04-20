@@ -190,24 +190,26 @@ public class Nonogram {
 			}
 
 			int index = 0;
-			boolean black = false;
+			boolean white = false;
 			int[] aux = new int[columnConstraints.size()];
 
 			for (int i = 0; i < squares.length; i++) {
 				boolean v = squares[i][colIndex];
 				if (v == true) {
 					counter++;
-					black = false;
-					if (i == squares.length - 1) {
+					white = false;
+					if (i == (squares[colIndex].length - 1)) {
 						aux[index] = counter;
 						index++;
 					}
-				} else if (v == false && black == false) {
+				} else if (v == false && white == false) {
 					aux[index] = counter;
 					counter = 0;
-					black = true;
+					white = true;
 					index++;
 				}
+				System.out.println("size =  " + aux.length + " index = "
+						+ index);
 			}
 
 			for (int i = 0; i < columnConstraints.size(); i++) {
