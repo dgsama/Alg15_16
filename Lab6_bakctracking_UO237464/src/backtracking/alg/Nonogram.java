@@ -208,8 +208,6 @@ public class Nonogram {
 					white = true;
 					index++;
 				}
-				System.out.println("size =  " + aux.length + " index = "
-						+ index);
 			}
 
 			for (int i = 0; i < columnConstraints.size(); i++) {
