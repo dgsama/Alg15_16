@@ -40,6 +40,7 @@ public class Nonogram {
 			}
 		}
 		squares = new boolean[getSize()][getSize()];
+		result = new boolean[getSize()][getSize()];
 	}
 
 	// Getter and setter for attribute size
@@ -54,7 +55,7 @@ public class Nonogram {
 	/**
 	 * Method to show the matrix of the nonogram
 	 */
-	protected void show(boolean [][] aux) {
+	protected void show(boolean[][] aux) {
 		System.out.println("Nonogram of dimension " + getSize());
 		for (int i = 0; i < aux.length; i++) {
 			for (int j = 0; j < aux[0].length; j++) {
@@ -113,24 +114,32 @@ public class Nonogram {
 	}
 
 	private void backtracking(int row) {
-		if (row == getSize()) {
-			if (validSolution() == true) {
-				found = true;
-				result = squares;
-				show(squares);
-				show(result);
-			}
-		} else {
-			boolean[] tempRow = squares[row];
-			boolean[][] posibilities = checkOptions(row);
-			for (int i = 0; i < posibilities.length; i++) {
-				squares[row] = posibilities[i];
-				if (found == false) {
-					backtracking(row + 1);
+		if (found == false) {
+			if (row == getSize()) {
+				if (validSolution() == true) {
+					found = true;
+					storeSolution(squares);
+					show(result);
 				}
-				squares[row] = tempRow;
+			} else {
+				boolean[] tempRow = squares[row];
+				boolean[][] posibilities = checkOptions(row);
+				for (int i = 0; i < posibilities.length; i++) {
+					squares[row] = posibilities[i];
+					backtracking(row + 1);
+					squares[row] = tempRow;
+				}
 			}
 		}
+	}
+
+	private void storeSolution(boolean[][] s) {
+		for (int i = 0; i < s.length; i++) {
+			for (int j = 0; j < s.length; j++) {
+				result[i][j] = s[i][j];
+			}
+		}
+
 	}
 
 	private boolean[][] checkOptions(int row) {
@@ -152,7 +161,7 @@ public class Nonogram {
 			int p = squares.length + 1 - c;
 			aux = new boolean[p][squares.length];
 			for (int i = 0; i < p; i++) {
-				for (int j = i; j < c+i; j++) {
+				for (int j = i; j < c + i; j++) {
 					aux[i][j] = true;
 				}
 			}
