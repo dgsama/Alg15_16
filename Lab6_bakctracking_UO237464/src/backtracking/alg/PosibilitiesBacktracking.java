@@ -12,7 +12,7 @@ public class PosibilitiesBacktracking {
 		result = new ArrayList<boolean[]>();
 	}
 
-	public void BackTracking(int index, boolean[] v) {
+	public void backTracking(int index, boolean[] v) {
 		if (index == v.length) {
 			if (correct(v)) {
 				boolean[] aux = new boolean[v.length];
@@ -28,7 +28,7 @@ public class PosibilitiesBacktracking {
 				} else {
 					v[index] = false;
 				}
-				BackTracking(index + 1, v);
+				backTracking(index + 1, v);
 				if (i == 0) {
 					v[index] = false;
 				} else {
@@ -42,20 +42,21 @@ public class PosibilitiesBacktracking {
 		int posOfFirst = getFirstPos(v);
 		if (posOfFirst != -1) {
 			int counter = 0;
-			boolean blankFounded = false;
+			boolean white = false;
 			ArrayList<Integer> result = new ArrayList<Integer>();
 
 			for (int i = posOfFirst; i < v.length; i++) {
 				boolean value = v[i];
-				if (value) {
+				if (value == true) {
 					counter++;
-					blankFounded = false;
-					if (i == v.length - 1)
+					white = false;
+					if (i == v.length - 1) {
 						result.add(counter);
-				} else if (!value && !blankFounded) {
+					}
+				} else if (value == false && white == false) {
 					result.add(counter);
 					counter = 0;
-					blankFounded = true;
+					white = true;
 				}
 			}
 			// If the row is empty
@@ -83,7 +84,7 @@ public class PosibilitiesBacktracking {
 
 	private int getFirstPos(boolean[] vector) {
 		for (int i = 0; i < vector.length; i++) {
-			if (vector[i]==true) {
+			if (vector[i] == true) {
 				return i;
 			}
 		}

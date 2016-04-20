@@ -9,8 +9,8 @@ import java.util.ArrayList;
 
 public class Nonogram {
 
-	public static boolean[][] squares;
-	public static boolean[][] result;
+	public boolean[][] squares;
+	public boolean[][] result;
 	public static ArrayList<ArrayList<Integer>> rowsNumbers;
 	public static ArrayList<ArrayList<Integer>> columnsNumbers;
 
@@ -54,11 +54,11 @@ public class Nonogram {
 	/**
 	 * Method to show the matrix of the nonogram
 	 */
-	protected void show() {
+	protected void show(boolean [][] aux) {
 		System.out.println("Nonogram of dimension " + getSize());
-		for (int i = 0; i < result.length; i++) {
-			for (int j = 0; j < result[0].length; j++) {
-				if (result[i][j] == false) {
+		for (int i = 0; i < aux.length; i++) {
+			for (int j = 0; j < aux[0].length; j++) {
+				if (aux[i][j] == false) {
 					System.out.print((char) white + " ");
 				} else {
 					System.out.print((char) black + " ");
@@ -78,7 +78,8 @@ public class Nonogram {
 	 *         problem.
 	 * @throws FileNotFoundException
 	 */
-	public ArrayList<ArrayList<Integer>> parseFile(String file) throws FileNotFoundException {
+	public ArrayList<ArrayList<Integer>> parseFile(String file)
+			throws FileNotFoundException {
 
 		FileReader f = new FileReader(file);
 		BufferedReader br;
@@ -116,8 +117,8 @@ public class Nonogram {
 			if (validSolution() == true) {
 				found = true;
 				result = squares;
-				System.out.println("KKKKKKKKKKKKKK");
-				show();
+				show(squares);
+				show(result);
 			}
 		} else {
 			boolean[] tempRow = squares[row];
@@ -137,24 +138,26 @@ public class Nonogram {
 		boolean[][] aux;
 
 		if (constraints.size() > 1) {
-			boolean[] r = new boolean[size];
-			PosibilitiesBacktracking p = new PosibilitiesBacktracking(constraints);
-			p.BackTracking(0, r);
+			boolean[] r = new boolean[getSize()];
+			PosibilitiesBacktracking p = new PosibilitiesBacktracking(
+					constraints);
+			p.backTracking(0, r);
 			aux = new boolean[p.result.size()][getSize()];
 			for (int i = 0; i < aux.length; i++) {
 				aux[i] = p.result.get(i);
 			}
+			return aux;
 		} else {
 			int c = constraints.get(0);
 			int p = squares.length + 1 - c;
 			aux = new boolean[p][squares.length];
 			for (int i = 0; i < p; i++) {
-				for (int j = i; j < c; j++) {
+				for (int j = i; j < c+i; j++) {
 					aux[i][j] = true;
 				}
 			}
+			return aux;
 		}
-		return aux;
 	}
 
 	private boolean validSolution() {
@@ -172,6 +175,7 @@ public class Nonogram {
 		int indexFirstElement = getFirst(colIndex);
 
 		if (columnConstraints.size() > 1) {
+
 			if (indexFirstElement == -1) {
 				return false;
 			}
@@ -203,15 +207,18 @@ public class Nonogram {
 				}
 			}
 			return true;
-		} else{
+		} else {
+
 			if (indexFirstElement != -1) {
 				for (int i = indexFirstElement; i < squares.length; i++) {
 					if (squares[i][colIndex] == true) {
 						counter++;
-					} else if (moreSquares(i, colIndex) == true) {
-						return false;
 					} else {
-						break;
+						if (moreSquares(i, colIndex) == true) {
+							return false;
+						} else {
+							break;
+						}
 					}
 				}
 				return (counter == columnConstraints.get(0));
@@ -232,8 +239,9 @@ public class Nonogram {
 
 	private int getFirst(int col) {
 		for (int i = 0; i < squares.length; i++) {
-			if (squares[i][col] == true)
+			if (squares[i][col] == true) {
 				return i;
+			}
 		}
 		return -1;
 	}

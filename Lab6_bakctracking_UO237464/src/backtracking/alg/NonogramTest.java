@@ -13,9 +13,7 @@ public class NonogramTest {
 	public void testA() throws IOException {
 		Nonogram case1 = new Nonogram("case1.txt");
 
-		case1.show();
 		case1.calculate();
-		case1.show();
 		
 		boolean[][] expectedResult = { { false, false, true, true, true }, { false, false, true, false, false },
 				{ true, true, true, true, false }, { true, true, false, false, false },
