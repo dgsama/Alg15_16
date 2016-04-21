@@ -28,6 +28,7 @@ public class NonogramTest {
 		}
 	}
 
+	/*
 	@Test
 	public void TestB() throws FileNotFoundException {
 		Nonogram c = new Nonogram("case2.txt");
@@ -55,5 +56,5 @@ public class NonogramTest {
 		Nonogram c = new Nonogram("case2.txt");
 		c.calculate();
 	}
-
+*/
 }
