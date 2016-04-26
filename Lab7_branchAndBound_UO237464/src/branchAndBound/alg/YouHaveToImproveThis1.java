@@ -3,8 +3,11 @@
 // Develop the tree of states with backtracking without pruning
 
 package branchAndBound.alg;
+import java.util.ArrayList;
 
-public class YouHaveToImproveThis1 {
+import branchAndBound.util.Node;
+
+public class YouHaveToImproveThis1 extends Node{
 
 	static int n;
 	static int[] v;
@@ -64,5 +67,23 @@ public class YouHaveToImproveThis1 {
 						mark[level] = false;
 					}
 				}
+	}
+
+	@Override
+	public void calculateHeuristicValue() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public ArrayList<Node> expand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean isSolution() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
