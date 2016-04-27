@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import branchAndBound.util.BranchAndBound;
 import branchAndBound.util.Node;
 
@@ -27,10 +30,6 @@ public class MySolution extends BranchAndBound {
 		k = data[1];
 		c = data[2];
 
-		if (n >= k) {
-			n = k;
-		}
-
 		int[] v = fillV(n);
 		rootNode = new Selection(v, k, c);
 	}
@@ -40,29 +39,21 @@ public class MySolution extends BranchAndBound {
 	 * the problem
 	 * 
 	 * @param n
-	 *            size of vector
 	 * @param k
-	 *            number of elements for result
 	 * @param c
-	 *            final amount
 	 */
 	public MySolution(int n, int k, int c) {
-		
-		if (n >= k) {
-			n = k;
-		}
 
 		int[] v = fillV(n);
-
 		rootNode = new Selection(v, k, c);
+		
 	}
 
 	/**
 	 * Method to fill the array of integers.
 	 * 
 	 * @param n
-	 *            = size
-	 * @return full integer array
+	 * @return full
 	 */
 	private int[] fillV(int n) {
 		int[] out = new int[n];
@@ -78,9 +69,7 @@ public class MySolution extends BranchAndBound {
 	 * Method to read the problem from a .txt file
 	 * 
 	 * @param file
-	 *            = name of the file
 	 * @param data
-	 *            = vector of data
 	 * @throws FileNotFoundException
 	 */
 	private void parseFile(String file, int[] data)
@@ -109,41 +98,62 @@ public class MySolution extends BranchAndBound {
 
 /***************************************************/
 class Selection extends Node {
+	private static Logger log = LoggerFactory.getLogger(Selection.class);
+
+	public int k; // Numbers of elements of the solution
+	public int c; // Final sum of each vector solution
+	public int[] numbers; // All the numbers to compute the solution vector
+	public int n; // Size of the numbers array
+
+	public boolean[] mark;
+	public int[] partialSolution;
+
+	private int sum; //Suma en cada paso
 
 	public Selection(int[] v, int k, int c) {
+		this.k = k;
+		this.c = c;
+		numbers = v;
+		n = numbers.length;
+
+		log.debug("PROBLEM");
+		String message = "Size = " + numbers.length
+				+ ", Number of elements to do the sum = " + k
+				+ " and final sum of the solution vector = " + c;
+		log.debug(message);
+
+		partialSolution = new int[n];
+		for (int i = 0; i < partialSolution.length; i++) {
+			partialSolution[i] = -1; // Initially, no assignments
+		}
+		mark = new boolean[n];
+		for (int i = 0; i < mark.length; i++) {
+			mark[i] = false; // Initially, no assignments
+		}
+	}
+
+	public Selection(Selection parent, int j) {
 
 	}
 
 	@Override
 	public String toString() {
-		StringBuffer sb = new StringBuffer("===============\n");
-		/*
-		 * for (int i=0; i<partialSolution.length; i++) { if (partialSolution[i]
-		 * != -1) sb.append("THE TASK " + partialSolution[i] +
-		 * " IS ASSIGNED TO THE WORKER " + i + "\n"); else
-		 * sb.append("THE TASK FOR WORKER " + i + " IS NOT ASSIGNED YET \n"); }
-		 * sb.append("Heuristic value = " + heuristicValue + "\n");
-		 */
-		sb.append("===============\n");
-		return sb.toString();
+		return null;
 	}
 
 	@Override
 	public void calculateHeuristicValue() {
-		// TODO Auto-generated method stub
 
 	}
 
 	@Override
 	public ArrayList<Node> expand() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
 	public boolean isSolution() {
-		// TODO Auto-generated method stub
-		return false;
+		 return depth == k && sum == c;
 	}
 
 }
