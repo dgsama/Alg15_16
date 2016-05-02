@@ -19,6 +19,7 @@ public class Program {
 		
 		
 		/**CASE 2**/
+		t1 = System.currentTimeMillis();
 		MySolution s2 = new MySolution("case2.txt");
 		t2 = System.currentTimeMillis();
 		times[1] = t2 - t1;

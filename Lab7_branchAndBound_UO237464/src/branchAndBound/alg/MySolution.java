@@ -71,30 +71,32 @@ public class MySolution extends BranchAndBound {
 	 */
 	private int[] fillV(int n, int c) {
 		int[] out = new int[n];
-//		
-//		 ArrayList<Integer> auxOut = new ArrayList<Integer>();
-//		 int aux = 0;
-//		 random = new Random();
-//		
-//		 while (auxOut.size() < out.length) {
-//		 aux = random.nextInt(c);
-//		 if (auxOut.contains(aux) == false && aux > 0) {
-//		 auxOut.add(aux);
-//		 }
-//		 }
-//		
-//		 for (int i = 0; i < out.length; i++) {
-//		 out[i] = auxOut.get(i);
-//		 }
-		
-		 out = sortArray(out);
-		
-		 for (int i = 0; i < out.length; i++) {
-		 out[i] = i + 1;
-		 }
+
+		/**
+		 * THIS PART OF THE CODE IS FOR GENERATE A RANDOM VECTOR ArrayList
+		 * <Integer> auxOut = new ArrayList<Integer>(); int aux = 0; random =
+		 * new Random();
+		 * 
+		 * while (auxOut.size() < out.length) { aux = random.nextInt(c); if
+		 * (aux>0 && auxOut.contains(aux) == false) { auxOut.add(aux); } }
+		 * 
+		 * for (int i = 0; i < out.length; i++) { out[i] = auxOut.get(i); }
+		 * 
+		 * out = sortArray(out);
+		 */
+
+		for (int i = 0; i < out.length; i++) {
+			out[i] = i + 1;
+		}
 		return out;
 	}
 
+	/**
+	 * Method to sort the random vector
+	 * 
+	 * @param out
+	 * @return
+	 */
 	private int[] sortArray(int[] out) {
 		int aux;
 		for (int i = 0; i < out.length - 1; i++) {
@@ -202,13 +204,18 @@ class Selection extends Node {
 		if (sum > c || depth > k || (c - sum == 0 && depth != k)) {
 			heuristicValue = Integer.MAX_VALUE;
 		} else {
-			options = posibleOptions() + 1;
-
+			options = possibleOptions() + 1;
 			heuristicValue = (c - sum) / options;
 		}
 	}
 
-	private int posibleOptions() {
+	/**
+	 * Method to know how many numbers we can use at this moment of the
+	 * computation
+	 * 
+	 * @return int
+	 */
+	private int possibleOptions() {
 		int counter = 0;
 		for (int i = 0; i < markedElements.length; i++) {
 			if (markedElements[i] == false) {
@@ -225,15 +232,23 @@ class Selection extends Node {
 	@Override
 	public ArrayList<Node> expand() {
 		ArrayList<Node> result = new ArrayList<>();
+
 		boolean[] markNotTakingIt = this.markedElements.clone();
 		Selection vector1 = new Selection(this, markNotTakingIt, 0);
+
 		boolean[] markTakingIt = this.markedElements.clone();
 		markTakingIt[depth] = true;
 		Selection vector2 = new Selection(this, markTakingIt, numbers[depth]);
+
 		result.add(vector1);
 		result.add(vector2);
 
 		return result;
+	}
+
+	@Override
+	public int initialValuePruneLimit() {
+		return c + 1;
 	}
 
 	@Override
