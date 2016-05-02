@@ -2,8 +2,8 @@ package branchAndBound.util;
 
 import java.util.ArrayList;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+//import org.slf4j.Logger;
+//import org.slf4j.LoggerFactory;
 
 /**
  * Main class to solve problems using the Branch and Bound technique
@@ -11,7 +11,7 @@ import org.slf4j.LoggerFactory;
  * @author viceg
  */
 public class BranchAndBound {
-	private static Logger log = LoggerFactory.getLogger(BranchAndBound.class);
+	//private static Logger log = LoggerFactory.getLogger(BranchAndBound.class);
 	protected Heap ds; //Nodes to be explored (not used nodes)
 	protected Node bestNode; //To save the final node of the best solution
 	protected Node rootNode; //Initial node
@@ -74,9 +74,13 @@ public class BranchAndBound {
      */
     public void printSolutionTrace() {
     	if (bestNode == null) {
-			log.debug("Original:");
+			/*log.debug("Original:");
 			log.debug(rootNode.toString());
-    		log.debug("THERE IS NO SOLUTION");
+    		log.debug("THERE IS NO SOLUTION");*/
+    		System.out.println("Original:");
+    		System.out.println(rootNode.toString());
+    		System.out.println("THERE IS NO SOLUTION\n\n");
+    		
     	} 
     	else {
     		//Extract the path of the used nodes from bestNode to the rootNode
@@ -84,12 +88,16 @@ public class BranchAndBound {
 
             for (int i = 0; i < result.size();  i++) {
     			if (i == 0) 
-    				log.debug("Original:");
+    				//log.debug("Original:");
+    				System.out.println("Original:");
     			else 
-    				log.debug("Step " + i + ":");
-				log.debug(result.get(result.size()-i-1).toString());
+    				//log.debug("Step " + i + ":");
+    				System.out.println("Step " + i + ":");
+				//log.debug(result.get(result.size()-i-1).toString());
+    			System.out.println(result.get(result.size()-i-1).toString());
     	    }
-            log.debug("\nSolution with " + bestNode.getDepth() + " step(s).");	
+            //log.debug("\nSolution with " + bestNode.getDepth() + " step(s).");
+            System.out.println("\nSolution with " + bestNode.getDepth() + " step(s).");
     	}
     }
 }

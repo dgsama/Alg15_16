@@ -5,14 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.ArrayList;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import java.util.Random;
 
 import branchAndBound.util.BranchAndBound;
 import branchAndBound.util.Node;
 
 public class MySolution extends BranchAndBound {
+
+	public Random random;
 
 	/**
 	 * Constructor for the problem using a file with the problem parameters
@@ -30,8 +30,11 @@ public class MySolution extends BranchAndBound {
 		k = data[1];
 		c = data[2];
 
-		int[] v = fillV(n);
+		n = proveN(n, c);
+
+		int[] v = fillV(n, c);
 		rootNode = new Selection(v, k, c);
+		branchAndBound(rootNode);
 	}
 
 	/**
@@ -43,10 +46,21 @@ public class MySolution extends BranchAndBound {
 	 * @param c
 	 */
 	public MySolution(int n, int k, int c) {
+		n = proveN(n, c);
 
-		int[] v = fillV(n);
+		int[] v = fillV(n, c);
 		rootNode = new Selection(v, k, c);
-		
+		branchAndBound(rootNode);
+
+	}
+
+	private int proveN(int n, int c) {
+		if (n > c) {
+			return c;
+		} else {
+			return n;
+		}
+
 	}
 
 	/**
@@ -55,13 +69,43 @@ public class MySolution extends BranchAndBound {
 	 * @param n
 	 * @return full
 	 */
-	private int[] fillV(int n) {
+	private int[] fillV(int n, int c) {
 		int[] out = new int[n];
+//		
+//		 ArrayList<Integer> auxOut = new ArrayList<Integer>();
+//		 int aux = 0;
+//		 random = new Random();
+//		
+//		 while (auxOut.size() < out.length) {
+//		 aux = random.nextInt(c);
+//		 if (auxOut.contains(aux) == false && aux > 0) {
+//		 auxOut.add(aux);
+//		 }
+//		 }
+//		
+//		 for (int i = 0; i < out.length; i++) {
+//		 out[i] = auxOut.get(i);
+//		 }
+		
+		 out = sortArray(out);
+		
+		 for (int i = 0; i < out.length; i++) {
+		 out[i] = i + 1;
+		 }
+		return out;
+	}
 
-		for (int i = 1; i < out.length; i++) {
-			out[i] = i;
+	private int[] sortArray(int[] out) {
+		int aux;
+		for (int i = 0; i < out.length - 1; i++) {
+			for (int j = i + 1; j < out.length; j++) {
+				if (out[j] < out[i]) {
+					aux = out[i];
+					out[i] = out[j];
+					out[j] = aux;
+				}
+			}
 		}
-
 		return out;
 	}
 
@@ -72,8 +116,7 @@ public class MySolution extends BranchAndBound {
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	private void parseFile(String file, int[] data)
-			throws FileNotFoundException {
+	private void parseFile(String file, int[] data) throws FileNotFoundException {
 		FileReader f = new FileReader(file);
 		BufferedReader br;
 
@@ -98,17 +141,15 @@ public class MySolution extends BranchAndBound {
 
 /***************************************************/
 class Selection extends Node {
-	private static Logger log = LoggerFactory.getLogger(Selection.class);
 
 	public int k; // Numbers of elements of the solution
 	public int c; // Final sum of each vector solution
 	public int[] numbers; // All the numbers to compute the solution vector
 	public int n; // Size of the numbers array
 
-	public boolean[] mark;
-	public int[] partialSolution;
+	public boolean[] markedElements;
 
-	private int sum; //Suma en cada paso
+	private int sum; // Suma en cada paso
 
 	public Selection(int[] v, int k, int c) {
 		this.k = k;
@@ -116,44 +157,88 @@ class Selection extends Node {
 		numbers = v;
 		n = numbers.length;
 
-		log.debug("PROBLEM");
-		String message = "Size = " + numbers.length
-				+ ", Number of elements to do the sum = " + k
+		// log.debug("PROBLEM");
+		String message = "Size = " + numbers.length + ", Number of elements to do the sum = " + k
 				+ " and final sum of the solution vector = " + c;
-		log.debug(message);
+		// log.debug(message);
+		System.out.println("PROBLEM\n");
+		System.out.println(message);
 
-		partialSolution = new int[n];
-		for (int i = 0; i < partialSolution.length; i++) {
-			partialSolution[i] = -1; // Initially, no assignments
-		}
-		mark = new boolean[n];
-		for (int i = 0; i < mark.length; i++) {
-			mark[i] = false; // Initially, no assignments
-		}
+		markedElements = new boolean[n];
 	}
 
-	public Selection(Selection parent, int j) {
+	public Selection(Selection parent, boolean[] mark, int value) {
+		parentID = parent.getID();
+		depth = parent.getDepth() + 1;
+		k = parent.k;
+		c = parent.c;
+		n = parent.n;
+		numbers = parent.numbers.clone();
 
+		this.markedElements = mark;
+		this.sum = parent.sum + value;
+		calculateHeuristicValue();
 	}
 
 	@Override
 	public String toString() {
-		return null;
+		StringBuffer sb = new StringBuffer("-----------\nVector:");
+		for (int i = 0; i < numbers.length; i++) {
+			sb.append(" " + numbers[i]);
+		}
+		sb.append("\nMarked:  ");
+		for (int i = 0; i < markedElements.length; i++) {
+			if (markedElements[i])
+				sb.append(i + 1 + ", ");
+		}
+		sb.append("\nHeuristic value = " + heuristicValue + "\n");
+		sb.append("-----------\n");
+		return sb.toString();
 	}
 
 	@Override
 	public void calculateHeuristicValue() {
+		int options = 0;
+		if (sum > c || depth > k || (c - sum == 0 && depth != k)) {
+			heuristicValue = Integer.MAX_VALUE;
+		} else {
+			options = posibleOptions() + 1;
 
+			heuristicValue = (c - sum) / options;
+		}
+	}
+
+	private int posibleOptions() {
+		int counter = 0;
+		for (int i = 0; i < markedElements.length; i++) {
+			if (markedElements[i] == false) {
+				if (sum + numbers[i] <= c) {
+					counter++;
+				} else {
+					break;
+				}
+			}
+		}
+		return counter;
 	}
 
 	@Override
 	public ArrayList<Node> expand() {
-		return null;
+		ArrayList<Node> result = new ArrayList<>();
+		boolean[] markNotTakingIt = this.markedElements.clone();
+		Selection vector1 = new Selection(this, markNotTakingIt, 0);
+		boolean[] markTakingIt = this.markedElements.clone();
+		markTakingIt[depth] = true;
+		Selection vector2 = new Selection(this, markTakingIt, numbers[depth]);
+		result.add(vector1);
+		result.add(vector2);
+
+		return result;
 	}
 
 	@Override
 	public boolean isSolution() {
-		 return depth == k && sum == c;
+		return depth == k && sum == c;
 	}
 
 }

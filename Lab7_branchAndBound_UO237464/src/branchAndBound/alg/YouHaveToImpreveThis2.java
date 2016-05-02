@@ -17,9 +17,9 @@ public class YouHaveToImpreveThis2 {
 	static int[] v;
 	static int k;
 	static int c;
-	static boolean[] mark; //whether you get or not an element
-	static int sum; //cumulative sum in a state
-	static int taken; //how many elements we chose
+	static boolean[] mark; // whether you get or not an element
+	static int sum; // cumulative sum in a state
+	static int taken; // how many elements we chose
 	static boolean solutionFound;
 
 	public static void main(String arg[]) {
@@ -54,9 +54,7 @@ public class YouHaveToImpreveThis2 {
 			System.out.println();
 		}
 
-		else if (taken < k && 
-				sum < c && 
-				n - level >= k - taken) //prunings
+		else if (taken < k && sum < c && n - level >= k - taken) // prunings
 			for (int j = 0; j <= 1; j++)
 				if (!solutionFound) {
 					if (j == 1) {
