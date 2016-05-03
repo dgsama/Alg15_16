@@ -201,7 +201,7 @@ class Selection extends Node {
 	@Override
 	public void calculateHeuristicValue() {
 		int options = 0;
-		if (sum > c || depth > k || (c - sum == 0 && depth != k)) {
+		if (sum > c || depth > k || (c - sum == 0 && depth != k)|| depth == numbers.length) {
 			heuristicValue = Integer.MAX_VALUE;
 		} else {
 			options = possibleOptions() + 1;
