@@ -56,7 +56,7 @@ public class RoadsInCityTest {
 	@Test
 	public void testH() {
 		long result = executeFromFile("case8.txt");
-		assertEquals(-1, result);
+		assertEquals(2, result);
 	}
 
 	@Test

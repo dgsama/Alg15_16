@@ -13,7 +13,7 @@ public class Nonogram {
 	public boolean[][] squaresSolution;
 	public static ArrayList<ArrayList<Integer>> rowsNumbers;
 	public static ArrayList<ArrayList<Integer>> columnsNumbers;
-	
+
 	private ArrayList<Integer> constraints;
 	private ArrayList<boolean[]> result;
 
@@ -82,8 +82,7 @@ public class Nonogram {
 	 *         problem.
 	 * @throws FileNotFoundException
 	 */
-	public ArrayList<ArrayList<Integer>> parseFile(String file)
-			throws FileNotFoundException {
+	public ArrayList<ArrayList<Integer>> parseFile(String file) throws FileNotFoundException {
 
 		FileReader f = new FileReader(file);
 		BufferedReader br;
@@ -169,7 +168,7 @@ public class Nonogram {
 			boolean white = false;
 			int[] aux = new int[columnConstraints.size()];
 
-			for (int i = 0; i < squares.length; i++) {
+			for (int i = 0; i < squares.length && index < aux.length; i++) {
 				boolean v = squares[i][colIndex];
 				if (v == true) {
 					counter++;
@@ -234,11 +233,11 @@ public class Nonogram {
 	public void ImprimirRestriccionesColumna() {
 
 		for (int i = 0; i < columnsNumbers.size(); i++) {
-			
+
 			ArrayList<Integer> aux = columnsNumbers.get(i);
-			
+
 			for (int j = 0; j < aux.size(); j++) {
-				System.out.print(aux.get(i) + ", ");
+				System.out.print(aux.get(j) + ", ");
 			}
 			System.out.println();
 		}
@@ -248,26 +247,24 @@ public class Nonogram {
 	public void ImprimirRestriccionesFilas() {
 
 		for (int i = 0; i < rowsNumbers.size(); i++) {
-			
+
 			ArrayList<Integer> aux = rowsNumbers.get(i);
-			
+
 			for (int j = 0; j < aux.size(); j++) {
-				System.out.print(aux.get(i) + ", ");
+				System.out.print(aux.get(j) + ", ");
 			}
 			System.out.println();
 		}
 
 	}
-	
+
 	private boolean[][] checkOptions(int row) {
 		ArrayList<Integer> auxCons = rowsNumbers.get(row);
 		boolean[][] aux;
 
-		
 		if (auxCons.size() > 1) {
 			boolean[] r = new boolean[getSize()];
-			PosibilitiesBacktracking p = new PosibilitiesBacktracking(
-					auxCons);
+			PosibilitiesBacktracking p = new PosibilitiesBacktracking(auxCons);
 			p.optionsBacktracking(0, r);
 			aux = new boolean[p.result.size()][getSize()];
 			for (int i = 0; i < aux.length; i++) {
@@ -286,8 +283,10 @@ public class Nonogram {
 			return aux;
 		}
 	}
+
 	/**
 	 * Auxiliary class for compute the possible solution for each row
+	 * 
 	 * @author David
 	 *
 	 */

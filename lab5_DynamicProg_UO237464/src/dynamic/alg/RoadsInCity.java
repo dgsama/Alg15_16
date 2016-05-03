@@ -33,6 +33,21 @@ public class RoadsInCity {
 	}
 
 	public long calculate(int si, int sj, int ei, int ej) {
+		boolean interchange = false;
+
+		if (si < ei || sj > ej) {
+			interchange = true;
+			int auxI, auxJ;
+
+			auxI = si;
+			si = ei;
+			ei = auxI;
+
+			auxJ = sj;
+			sj = ej;
+			ej = auxJ;
+		}
+
 		long result = 0;
 		boolean isFinish = false;
 		// Look if we can reach the end point.
@@ -42,11 +57,17 @@ public class RoadsInCity {
 		}
 		// Complete the initial maps.
 		fillInitialMap(si, sj, ei, ej);
-		visualMap[si][sj] = 's';
-		visualMap[ei][ej] = 'f';
+
+		if (interchange == false) {
+			visualMap[si][sj] = 's';
+			visualMap[ei][ej] = 'f';
+		} else {
+			visualMap[si][sj] = 'f';
+			visualMap[ei][ej] = 's';
+		}
 
 		// Print the maps in the console.
-		show(isFinish);
+		// show(isFinish);
 		showGraphicMap();
 
 		// Calculate the values of the number of ways to all the reachable
@@ -59,14 +80,15 @@ public class RoadsInCity {
 				}
 			}
 		}
-		//Show the result map
-		isFinish =true;
-		show(isFinish);
+		// Show the result map
+		isFinish = true;
+		// show(isFinish);
 
 		// Assign to the local variable the value of the ways to arrive to the
 		// end point and return it.
 		result = map[ei][ej];
 		if (result >= 0) {
+			System.out.println("The number of roads from start point to end point is = " + result);
 			return result;
 		} else {
 			return -1;
@@ -137,9 +159,9 @@ public class RoadsInCity {
 
 	private void show(boolean isFinish) {
 		System.out.println();
-		if(isFinish == false){
+		if (isFinish == false) {
 			System.out.print("THIS IS A MAP OF DIMENSIONS " + map.length + "x" + map[0].length);
-		}else{
+		} else {
 			System.out.print("THIS IS THE RESULT MAP");
 		}
 		for (int i = 0; i < map.length; i++) {

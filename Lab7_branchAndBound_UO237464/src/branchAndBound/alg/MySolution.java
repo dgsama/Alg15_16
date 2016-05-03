@@ -47,7 +47,6 @@ public class MySolution extends BranchAndBound {
 	 */
 	public MySolution(int n, int k, int c) {
 		n = proveN(n, c);
-
 		int[] v = fillV(n, c);
 		rootNode = new Selection(v, k, c);
 		branchAndBound(rootNode);
