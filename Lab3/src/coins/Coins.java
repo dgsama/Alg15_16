@@ -118,18 +118,18 @@ public class Coins {
 			return ScalePosition.RIGHT;
 	}
 
-	public ScalePosition posFake(int p1, int p2) {
-		int[] auxiliarArray= this.getArray();
-		
-		if(auxiliarArray[p1] == auxiliarArray[p2]){
-			return ScalePosition.EQUAL;
-		}
-		else if(auxiliarArray[p1] < auxiliarArray[p2]){
-			return ScalePosition.LEFT;
-		}else{
-			return ScalePosition.RIGHT;
-		}
-	}
+	// public ScalePosition posFake(int p1, int p2) {
+	// int[] auxiliarArray= this.getArray();
+	//
+	// if(auxiliarArray[p1] == auxiliarArray[p2]){
+	// return ScalePosition.EQUAL;
+	// }
+	// else if(auxiliarArray[p1] < auxiliarArray[p2]){
+	// return ScalePosition.LEFT;
+	// }else{
+	// return ScalePosition.RIGHT;
+	// }
+	// }
 
 	/**
 	 * Auxiliary support method for printing the values of the currencies of a

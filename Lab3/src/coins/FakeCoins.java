@@ -35,10 +35,11 @@ public class FakeCoins {
 			ScalePosition leftSide = bagWithFakeCoin.weigh(l, l, l + 1, l + 1);
 			ScalePosition rightSide = bagWithFakeCoin.weigh(l + 1, l + 1, r, r);
 
-			if (leftSide == ScalePosition.LEFT && rightSide == ScalePosition.RIGHT
-					|| leftSide == ScalePosition.RIGHT && rightSide == ScalePosition.LEFT) {
+			if ((leftSide == ScalePosition.LEFT && rightSide == ScalePosition.RIGHT)
+					|| (leftSide == ScalePosition.RIGHT && rightSide == ScalePosition.LEFT)) {
 				fakePos = l + 1;
 			} else if ((leftSide == ScalePosition.RIGHT && rightSide == ScalePosition.EQUAL)
+
 					|| (leftSide == ScalePosition.LEFT && rightSide == ScalePosition.EQUAL)) {
 				fakePos = l;
 			} else if ((leftSide == ScalePosition.EQUAL && rightSide == ScalePosition.LEFT)

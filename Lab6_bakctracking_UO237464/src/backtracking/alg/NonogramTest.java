@@ -10,11 +10,11 @@ import org.junit.Test;
 public class NonogramTest {
 	
 	
-//	@Test
-//	public void test1() throws FileNotFoundException {
-//		Nonogram test1 = new Nonogram("case8.txt");
-//		test1.calculate();
-//	}
+	@Test
+	public void test1() throws FileNotFoundException {
+		Nonogram test1 = new Nonogram("case8.txt");
+		test1.calculate();
+	}
 	
 	@Test
 	public void test2() throws FileNotFoundException{

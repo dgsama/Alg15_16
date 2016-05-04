@@ -40,7 +40,8 @@ public class BranchAndBound {
 
 		while (!ds.empty() && ds.estimateBest() < pruneLimit) {
 			Node node = ds.extractBestNode();
-
+			
+			
 			ArrayList<Node> children = node.expand();
 
 			for (Node child : children)

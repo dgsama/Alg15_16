@@ -125,13 +125,13 @@ public class Nonogram {
 					show(squaresSolution);
 				}
 			} else {
-					boolean[] tempRow = squares[row];
-					boolean[][] posibilities = checkOptions(row);
-					for (int i = 0; i < posibilities.length; i++) {
-						squares[row] = posibilities[i];
-						backtracking(row + 1);
-						squares[row] = tempRow;
-					}
+				boolean[] tempRow = squares[row];
+				boolean[][] posibilities = checkOptions(row);
+				for (int i = 0; i < posibilities.length; i++) {
+					squares[row] = posibilities[i];
+					backtracking(row + 1);
+					squares[row] = tempRow;
+				}
 			}
 		}
 	}
