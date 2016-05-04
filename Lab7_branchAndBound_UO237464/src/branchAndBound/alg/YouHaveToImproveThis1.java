@@ -3,19 +3,20 @@
 // Develop the tree of states with backtracking without pruning
 
 package branchAndBound.alg;
+
 import java.util.ArrayList;
 
 import branchAndBound.util.Node;
 
-public class YouHaveToImproveThis1 extends Node{
+public class YouHaveToImproveThis1 extends Node {
 
 	static int n;
 	static int[] v;
 	static int k;
 	static int c;
-	static boolean[] mark; //whether you get or not an element
-	static int sum; //cumulative sum in a state
-	static int taken; //how many elements we chose
+	static boolean[] mark; // whether you get or not an element
+	static int sum; // cumulative sum in a state
+	static int taken; // how many elements we chose
 	static boolean solutionFound;
 
 	public static void main(String arg[]) {
@@ -26,7 +27,7 @@ public class YouHaveToImproveThis1 extends Node{
 
 		mark = new boolean[n];
 		for (int i = 0; i < n; i++)
-			v[i] = i + 1; //assigning a value for every element
+			v[i] = i + 1; // assigning a value for every element
 		for (int i = 0; i < n; i++)
 			mark[i] = false;
 		taken = 0;
@@ -40,7 +41,8 @@ public class YouHaveToImproveThis1 extends Node{
 	}
 
 	static void backtracking(int level) {
-		if (level == n) { //we have a complete group to check if it is a solution
+		if (level == n) { // we have a complete group to check if it is a
+							// solution
 			if (taken == k && sum == c) {
 				solutionFound = true;
 				System.out.println();
@@ -49,7 +51,7 @@ public class YouHaveToImproveThis1 extends Node{
 					if (mark[i])
 						System.out.print(v[i] + "/");
 				System.out.println();
-			}			
+			}
 		}
 
 		else
@@ -72,7 +74,7 @@ public class YouHaveToImproveThis1 extends Node{
 	@Override
 	public void calculateHeuristicValue() {
 		// TODO Auto-generated method stub
-		
+
 	}
 
 	@Override

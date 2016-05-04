@@ -33,7 +33,10 @@ public class MySolution extends BranchAndBound {
 		n = proveN(n, c);
 
 		int[] v = fillV(n, c);
-		rootNode = new Selection(v, k, c);
+
+		Node node = new Selection(v, k, c);
+		rootNode = node;
+		rootNode.calculateHeuristicValue();
 		branchAndBound(rootNode);
 	}
 
@@ -48,7 +51,10 @@ public class MySolution extends BranchAndBound {
 	public MySolution(int n, int k, int c) {
 		n = proveN(n, c);
 		int[] v = fillV(n, c);
-		rootNode = new Selection(v, k, c);
+
+		Node node = new Selection(v, k, c);
+		rootNode = node;
+		rootNode.calculateHeuristicValue();
 		branchAndBound(rootNode);
 
 	}
@@ -192,6 +198,7 @@ class Selection extends Node {
 			if (markedElements[i])
 				sb.append(i + 1 + ", ");
 		}
+		// sb.append("\nDepth = " + depth + "\n");
 		sb.append("\nHeuristic value = " + heuristicValue + "\n");
 		sb.append("-----------\n");
 		return sb.toString();
@@ -200,7 +207,7 @@ class Selection extends Node {
 	@Override
 	public void calculateHeuristicValue() {
 		int options = 0;
-		if (sum > c || depth > k || (c - sum == 0 && depth != k)|| depth == numbers.length) {
+		if (sum > c || depth > k || (c - sum == 0 && depth != k) || depth == numbers.length) {
 			heuristicValue = Integer.MAX_VALUE;
 		} else {
 			options = possibleOptions() + 1;
