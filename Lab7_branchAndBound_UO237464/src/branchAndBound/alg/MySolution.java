@@ -164,7 +164,7 @@ class Selection extends Node {
 		this.c = c;
 		numbers = v;
 		n = numbers.length;
-		depth = 1;
+		// depth = getDepth() + 1;
 
 		// log.debug("PROBLEM");
 		String message = "Size = " + numbers.length
@@ -201,7 +201,7 @@ class Selection extends Node {
 			if (markedElements[i])
 				sb.append(i + 1 + ", ");
 		}
-		sb.append("\nDepth = " + depth + "\n");
+		// sb.append("\nDepth = " + depth + "\n");
 		sb.append("\nHeuristic value = " + heuristicValue + "\n");
 		sb.append("-----------\n");
 		return sb.toString();
@@ -248,9 +248,8 @@ class Selection extends Node {
 		Selection vector1 = new Selection(this, markNotTakingIt, 0);
 
 		boolean[] markTakingIt = this.markedElements.clone();
-		markTakingIt[depth - 1] = true;
-		Selection vector2 = new Selection(this, markTakingIt,
-				numbers[depth - 1]);
+		markTakingIt[depth] = true;
+		Selection vector2 = new Selection(this, markTakingIt, numbers[depth]);
 
 		result.add(vector1);
 		result.add(vector2);

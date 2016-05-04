@@ -16,9 +16,9 @@ public class Heap {
 											// know what nodes have been treated
 
 	public void show(){
-		Node[] aux = nodes.toArray();
+		Node[] aux = (Node[]) nodes.toArray();
 		for (int i = 0; i < nodes.size(); i++) {
-			System.out.println(aux.poll());			
+			System.out.println(aux[i]);			
 		}
 	}
 	/**

@@ -33,9 +33,9 @@ public class Coins {
 
 		int fakePosition = r.nextInt(coins.length);
 
-		if (r.nextBoolean())
-			coins[fakePosition] = standardWeight + 1;
-		else
+		// if (r.nextBoolean())
+		// coins[fakePosition] = standardWeight + 1;
+		// else
 			coins[fakePosition] = standardWeight - 1;
 	}
 
@@ -92,8 +92,8 @@ public class Coins {
 	 * @param rightSideEnds
 	 *            Index of the last element to the right plate
 	 * @return - ScalePosition.EQUAL The currencies of the two plates have the
-	 *         same weight ScalePosition.LEFT The coins of the left have more
-	 *         weight ScalePosition.RIGHT The coins of the right have more
+	 *         same weight ScalePosition.LEFT The coins of the left have less
+	 *         weight ScalePosition.RIGHT The coins of the right have less
 	 *         weight
 	 */
 	ScalePosition weigh(int leftSideStarts, int leftSideEnds,
@@ -112,7 +112,7 @@ public class Coins {
 		// Returns the enumerate corresponding to the result
 		if (leftWeight == rightWeight)
 			return ScalePosition.EQUAL;
-		else if (leftWeight > rightWeight)
+		else if (leftWeight < rightWeight)
 			return ScalePosition.LEFT;
 		else
 			return ScalePosition.RIGHT;
@@ -124,7 +124,7 @@ public class Coins {
 		if(auxiliarArray[p1] == auxiliarArray[p2]){
 			return ScalePosition.EQUAL;
 		}
-		else if(auxiliarArray[p1] > auxiliarArray[p2]){
+		else if(auxiliarArray[p1] < auxiliarArray[p2]){
 			return ScalePosition.LEFT;
 		}else{
 			return ScalePosition.RIGHT;

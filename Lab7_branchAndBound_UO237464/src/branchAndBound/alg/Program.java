@@ -10,13 +10,23 @@ public class Program {
 		long[] times = new long[7];
 		long t1, t2;
 
-		/** CASE 1 **/
-		t1 = System.currentTimeMillis();
-		MySolution s1 = new MySolution(99, 2, 100);
-		t2 = System.currentTimeMillis();
-		times[0] = t2 - t1;
-		s1.printSolutionTrace();
+		/** Test 3 **/
 
+		MySolution t3 = new MySolution("test3.txt");
+		t3.printSolutionTrace();
+
+		/** Test 4 **/
+
+		MySolution t4 = new MySolution("test4.txt");
+		t4.printSolutionTrace();
+
+		// /** CASE 1 **/
+		// t1 = System.currentTimeMillis();
+		// MySolution s1 = new MySolution("case1.txt");
+		// t2 = System.currentTimeMillis();
+		// times[0] = t2 - t1;
+		// s1.printSolutionTrace();
+		//
 		// /** CASE 2 **/
 		// t1 = System.currentTimeMillis();
 		// MySolution s2 = new MySolution("case2.txt");
@@ -58,11 +68,13 @@ public class Program {
 		// t2 = System.currentTimeMillis();
 		// times[6] = t2 - t1;
 		// s7.printSolutionTrace();
-
-		for (int i = 0; i < times.length; i++) {
-			System.out.println("Time for case " + (i + 1) + " is = " + times[i]
-					+ "ms");
-		}
+		//
+		//
+		//
+		// for (int i = 0; i < times.length; i++) {
+		// System.out.println("Time for case " + (i + 1) + " is = " + times[i]
+		// + "ms");
+		// }
 
 	}
 

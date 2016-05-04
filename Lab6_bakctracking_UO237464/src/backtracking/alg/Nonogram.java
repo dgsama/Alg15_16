@@ -82,7 +82,8 @@ public class Nonogram {
 	 *         problem.
 	 * @throws FileNotFoundException
 	 */
-	public ArrayList<ArrayList<Integer>> parseFile(String file) throws FileNotFoundException {
+	public ArrayList<ArrayList<Integer>> parseFile(String file)
+			throws FileNotFoundException {
 
 		FileReader f = new FileReader(file);
 		BufferedReader br;
@@ -124,13 +125,13 @@ public class Nonogram {
 					show(squaresSolution);
 				}
 			} else {
-				boolean[] tempRow = squares[row];
-				boolean[][] posibilities = checkOptions(row);
-				for (int i = 0; i < posibilities.length; i++) {
-					squares[row] = posibilities[i];
-					backtracking(row + 1);
-					squares[row] = tempRow;
-				}
+					boolean[] tempRow = squares[row];
+					boolean[][] posibilities = checkOptions(row);
+					for (int i = 0; i < posibilities.length; i++) {
+						squares[row] = posibilities[i];
+						backtracking(row + 1);
+						squares[row] = tempRow;
+					}
 			}
 		}
 	}
