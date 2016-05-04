@@ -11,10 +11,16 @@ import java.util.UUID;
  * @author viceg
  */
 public class Heap {
-	private PriorityQueue<Node> nodes; // Nodes on the Heap
+	public PriorityQueue<Node> nodes; // Nodes on the Heap
 	private HashMap<UUID, Node> usedNodes; // To compose the solution and to
 											// know what nodes have been treated
 
+	public void show(){
+		Node[] aux = nodes.toArray();
+		for (int i = 0; i < nodes.size(); i++) {
+			System.out.println(aux.poll());			
+		}
+	}
 	/**
 	 * Constructor for Heap objects
 	 */

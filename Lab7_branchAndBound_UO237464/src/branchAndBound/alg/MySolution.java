@@ -123,7 +123,8 @@ public class MySolution extends BranchAndBound {
 	 * @param data
 	 * @throws FileNotFoundException
 	 */
-	private void parseFile(String file, int[] data) throws FileNotFoundException {
+	private void parseFile(String file, int[] data)
+			throws FileNotFoundException {
 		FileReader f = new FileReader(file);
 		BufferedReader br;
 
@@ -163,9 +164,11 @@ class Selection extends Node {
 		this.c = c;
 		numbers = v;
 		n = numbers.length;
+		depth = 1;
 
 		// log.debug("PROBLEM");
-		String message = "Size = " + numbers.length + ", Number of elements to do the sum = " + k
+		String message = "Size = " + numbers.length
+				+ ", Number of elements to do the sum = " + k
 				+ " and final sum of the solution vector = " + c;
 		// log.debug(message);
 		System.out.println("PROBLEM\n");
@@ -174,7 +177,7 @@ class Selection extends Node {
 		markedElements = new boolean[n];
 	}
 
-	public Selection(Selection parent, boolean[] mark, int value) {
+	public Selection(Selection parent, boolean[] markedElements, int value) {
 		parentID = parent.getID();
 		depth = parent.getDepth() + 1;
 		k = parent.k;
@@ -182,7 +185,7 @@ class Selection extends Node {
 		n = parent.n;
 		numbers = parent.numbers.clone();
 
-		this.markedElements = mark;
+		this.markedElements = markedElements;
 		this.sum = parent.sum + value;
 		calculateHeuristicValue();
 	}
@@ -198,7 +201,7 @@ class Selection extends Node {
 			if (markedElements[i])
 				sb.append(i + 1 + ", ");
 		}
-		// sb.append("\nDepth = " + depth + "\n");
+		sb.append("\nDepth = " + depth + "\n");
 		sb.append("\nHeuristic value = " + heuristicValue + "\n");
 		sb.append("-----------\n");
 		return sb.toString();
@@ -207,11 +210,13 @@ class Selection extends Node {
 	@Override
 	public void calculateHeuristicValue() {
 		int options = 0;
-		if (sum > c || depth > k || (c - sum == 0 && depth != k) || depth == numbers.length) {
+		if (sum > c || depth > k || (c - sum == 0 && depth != k)) {
 			heuristicValue = Integer.MAX_VALUE;
+		} else if (c == sum && depth == k) {
+			heuristicValue = Integer.MIN_VALUE;
 		} else {
-			options = possibleOptions() + 1;
-			heuristicValue = (c - sum) / options;
+			// options = possibleOptions() + 1;
+			heuristicValue = (c - sum);// / options;
 		}
 	}
 
@@ -243,8 +248,9 @@ class Selection extends Node {
 		Selection vector1 = new Selection(this, markNotTakingIt, 0);
 
 		boolean[] markTakingIt = this.markedElements.clone();
-		markTakingIt[depth] = true;
-		Selection vector2 = new Selection(this, markTakingIt, numbers[depth]);
+		markTakingIt[depth - 1] = true;
+		Selection vector2 = new Selection(this, markTakingIt,
+				numbers[depth - 1]);
 
 		result.add(vector1);
 		result.add(vector2);
